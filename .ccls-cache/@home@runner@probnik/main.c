@@ -1,58 +1,38 @@
 #include <stdio.h>
 /*
-1. Ваня Штерн очень любит различные последовательности, в частности - числа Фибоначчи и хочет составлять слова из букв алфавита, номера которых предствляют собой цифры из чисел последовательности Фибоначчи. То есть для двузначные (и далее) числа предварительно необходимо разбить на цифры, для каждой из которых взять соответствующую букву. Напишите функцию char* MakeFibonacciWord(unsigned number), где number - количество чисел Фибоначчи (1 <= number <= 48), участвующих в формировании строки. Использовать первые 10 буквы латинского алфавита: «abcdefghij» (считать, что нулевая буква 'a'). Например, если number = 10, то функция должна вернуть “bbcdfibdcbdeff”, так как первые 6 чисел Фибоначчи равны 1, 1, 2, 3, 5, 8, 13, 21, 34, 55. 
+2. Ваня Штерн ежедневно ездит на троллейбусе, поэтому у него много билетов. Помогите Ване определять, является ли билет счастливым. Реализуйте функцию bool CheckTicket(unsigned int), которая принимает на вход номер билета (любой разрядности, не обязательно шестизначный) и возвращает true, если билет счастливый и false в противном случае 
 */
-
-void Fibonnachi(int number,int *fibonnachi)
+int CheckTicket(int number)
 {
-  for (int i=2;i<number;i++)
+  int counter = 0;
+  int arr[999]={};
+  while(number)
   {
-    fibonnachi[i]+=fibonnachi[i-1]+fibonnachi[i-2];
+    arr[counter]=number%10;
+    number/=10;
+    counter++;
   }
-}
-
-int pow(int number, int degree)
-{
-  if (degree==0) return 1;
-  int answer = 1;
-  for (int i = 0;i<degree;i++)
+  int firstHalf = 0;
+  for (int i = 0;i<counter/2;i++)//counter =4 0123
   {
-    answer*=number;
+    firstHalf +=arr[i];
   }
-  return answer;
-}
-
-char MakeFibonacciWord(unsigned number,int *fibonnachi/*fibonnachi */,char*  arr1)
-{
-  for (int i = 0;i<number;i++)
+  int secondHalf = 0;
+  for (int j = counter/2;j<counter;j++)
   {
-    int counter=0;
-    int arr = fibonnachi[i];
-    while (arr)
-    {
-      counter++;
-      arr/=10;
-    }
-  //  printf("%i\n",counter);
-    while (counter)
-    {
-      printf("%c",arr1[(fibonnachi[i]/pow(10,counter-1))%10]);
-      counter--;
-    }
-  
+    secondHalf +=arr[j];
   }
+  if (firstHalf==secondHalf)
+  {
+    return 1;
+  }
+  return 0;
 }
 
 int main()
 { 
   int number = 0;
   scanf("%i",&number);
-  char arr1[10] = {'a','b','c','d','e','f','g','h','i','j'} ;
-  int fibonnachi[48] = {1,1};
-  
-  Fibonnachi(number,fibonnachi);
-  for(int i=0;i<number;i++)printf("%i ",fibonnachi[i]);
-   printf("\n");
-  MakeFibonacciWord(number,fibonnachi,arr1);
+  CheckTicket(number) == 1 ? printf("True") : printf("False");
 }
 
